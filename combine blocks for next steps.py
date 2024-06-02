@@ -1,6 +1,3 @@
-from typing import Dict, Tuple, List
-import numpy as np
-
 def combine_blocks(
     M: Dict[Tuple[int, int], np.array], 
     block_sizes: List[int], 
