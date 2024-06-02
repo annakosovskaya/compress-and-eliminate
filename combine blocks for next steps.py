@@ -1,4 +1,11 @@
-def combine_blocks(M, block_sizes, step=2):
+from typing import Dict, Tuple, List
+import numpy as np
+
+def combine_blocks(
+    M: Dict[Tuple[int, int], np.array], 
+    block_sizes: List[int], 
+    step: int = 2
+) -> Tuple[Dict[Tuple[int, int], np.array], List[int], List[List[int]]]:
     """
     Combine adjacent blocks into larger blocks in a given matrix.
 
@@ -8,7 +15,10 @@ def combine_blocks(M, block_sizes, step=2):
         step (int): Number of blocks to combine in one dimension (default is 2 for 2x2).
 
     Returns:
-        dict: A new dictionary with combined blocks.
+        tuple: Contains the following elements:
+            - M_new (dict): A new dictionary with combined blocks.
+            - new_block_sizes (list): List of integers defining the size of combined blocks.
+            - close_blocks (list): List of lists containing indices of close blocks.
     """
     M_new = {}
     # Precompute new block sizes for combined blocks
@@ -36,6 +46,8 @@ def combine_blocks(M, block_sizes, step=2):
             if new_block is not None:
                 M_new[(i // step, j // step)] = new_block
 
-    return M_new, new_block_sizes
-
-M_new, new_block_sizes = combine_blocks(M, block_sizes_new)
+    close_blocks = [[] for _ in range(len(new_block_sizes))]
+    for line, col in M_new.keys():
+        close_blocks[line].append(col)
+    
+    return M_new, new_block_sizes, close_blocks
